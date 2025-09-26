@@ -3,12 +3,10 @@ import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, BookOpen, FileText, GraduationCap, Database, BarChart3 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-interface DashboardProps {
-  onNavigate: (path: string) => void;
-}
-
-const Dashboard = ({ onNavigate }: DashboardProps) => {
+const Dashboard = () => {
+  const navigate = useNavigate();
   const migrationOptions = [
     {
       id: 'estudiantes',
@@ -58,10 +56,10 @@ const Dashboard = ({ onNavigate }: DashboardProps) => {
     <Layout title="Catálogo de Migraciones">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {migrationOptions.map((option) => (
-          <Card 
-            key={option.id} 
+          <Card
+            key={option.id}
             className="hover:shadow-lg transition-shadow cursor-pointer group"
-            onClick={() => onNavigate(`/migrate/${option.id}`)}
+            onClick={() => navigate(`/migrate/${option.id}`)}
           >
             <CardHeader>
               <div className="flex items-center gap-3">

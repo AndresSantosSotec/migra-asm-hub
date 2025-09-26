@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useLogout } from '@/hooks/use-auth';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,9 +12,15 @@ interface LayoutProps {
 }
 
 const Layout = ({ children, showBackButton, onBack, title }: LayoutProps) => {
-  const handleLogout = () => {
-    // TODO: Implement with Supabase
-    console.log('Logout clicked');
+  const navigate = useNavigate();
+  const { handleLogout, loading } = useLogout();
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      navigate(-1);
+    }
   };
 
   return (
@@ -30,10 +38,11 @@ const Layout = ({ children, showBackButton, onBack, title }: LayoutProps) => {
             variant="ghost"
             size="sm"
             onClick={handleLogout}
+            disabled={loading}
             className="text-muted-foreground hover:text-foreground"
           >
             <LogOut className="h-4 w-4 mr-2" />
-            Cerrar sesión
+            {loading ? 'Cerrando...' : 'Cerrar sesión'}
           </Button>
         </div>
       </header>
@@ -47,7 +56,7 @@ const Layout = ({ children, showBackButton, onBack, title }: LayoutProps) => {
           {showBackButton && (
             <Button
               variant="outline"
-              onClick={onBack}
+              onClick={handleBack}
               className="ml-auto"
             >
               ← Volver

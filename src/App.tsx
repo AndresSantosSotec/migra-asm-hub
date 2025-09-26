@@ -24,7 +24,7 @@ const App: React.FC = () => {
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard onNavigate={() => {}} />
+                <Dashboard />
               </ProtectedRoute>
             }
           />
@@ -32,7 +32,7 @@ const App: React.FC = () => {
             path="/migrate/:type"
             element={
               <ProtectedRoute>
-                <MigrationPage type={''} onBack={() => {}} />
+                <MigrationPage />
               </ProtectedRoute>
             }
           />
@@ -40,7 +40,7 @@ const App: React.FC = () => {
             path="/migrate/pagos"
             element={
               <ProtectedRoute>
-                <PagosImportDashboard onBack={() => {}} />
+                <PagosImportDashboard />
               </ProtectedRoute>
             }
           />

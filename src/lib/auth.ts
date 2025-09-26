@@ -16,13 +16,37 @@ const USER_KEY = 'auth_user';
 
 export type UserPayload = { id: number; name: string; role_id?: number; [k: string]: any } | null;
 
-export type LoginResponse = { token: string; user: { id: number; name: string; role_id?: number; [k: string]: any }; [k: string]: any };
+export type LoginResponse = {
+  token: string;
+  user: { id: number; name: string; role_id?: number; [k: string]: any };
+  permissions?: any[];
+  allowedViews?: any[];
+  session?: Record<string, any>;
+  [k: string]: any;
+};
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
   const res = await api.post('/login', { email, password });
   const data = res.data as LoginResponse;
-  if (data?.token) setToken(data.token);
-  if (data?.user) setUser(data.user);
+
+  if (data?.token) {
+    setToken(data.token);
+  }
+
+  if (data?.user) {
+    const enrichedUser = {
+      ...data.user,
+      permissions: data.permissions ?? data.user?.permissions,
+      allowedViews: data.allowedViews ?? data.user?.allowedViews,
+      session: data.session ?? data.user?.session,
+    };
+
+    setUser(enrichedUser);
+    data.user = enrichedUser;
+  } else {
+    setUser(null);
+  }
+
   return data;
 }
 
@@ -52,7 +76,12 @@ export function getCurrentUser(): any | null {
 }
 
 export async function logout(): Promise<void> {
-  try { await api.post('/logout'); } catch {} finally { setToken(null); setUser(null); }
+  try {
+    await api.post('/logout');
+  } finally {
+    setToken(null);
+    setUser(null);
+  }
 }
 
 // Auto-logout on 401 responses (optional behavior)
