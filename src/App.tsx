@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import MigrationPage from "./pages/MigrationPage";
+import PagosImportDashboard from "./pages/PagosImportDashboard";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,9 @@ const App = () => {
       return <Dashboard onNavigate={handleNavigate} />;
     } else if (currentPage.startsWith('/migrate/')) {
       const type = currentPage.split('/')[2];
+      if (type === 'pagos') {
+        return <PagosImportDashboard onBack={handleBack} />;
+      }
       return <MigrationPage type={type} onBack={handleBack} />;
     }
     return <Dashboard onNavigate={handleNavigate} />;

@@ -21,11 +21,11 @@ const MigrationPage = ({ type, onBack }: MigrationPageProps) => {
 
   const typeLabels: Record<string, string> = {
     estudiantes: 'Estudiantes',
-    cursos: 'Cursos',
-    paginas: 'Páginas',
-    profesores: 'Profesores',
-    calificaciones: 'Calificaciones',
-    contenido: 'Contenido',
+    usuarios: 'Usuarios',
+    inscripciones: 'Inscripciones',
+    prospectos: 'Prospectos',
+    'estados-cuenta': 'Estados de Cuenta',
+    pagos: 'Pagos',
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
