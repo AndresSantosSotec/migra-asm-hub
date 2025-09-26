@@ -1,4 +1,4 @@
-import { login, isAdminOrSpecialUser, setToken, setUser } from '../lib/auth';
+import { login, logout, isAdminOrSpecialUser, setToken, setUser } from '../lib/auth';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -30,4 +30,25 @@ export function useLogin() {
   };
 
   return { handleLogin, error, loading };
+}
+
+export function useLogout() {
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleLogout = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await logout();
+      navigate('/login', { replace: true });
+    } catch (err: any) {
+      setError(err?.response?.data?.error || 'Error al cerrar sesión');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { handleLogout, error, loading };
 }

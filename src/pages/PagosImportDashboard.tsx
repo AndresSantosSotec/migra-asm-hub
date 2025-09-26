@@ -5,24 +5,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Upload, 
-  CheckCircle, 
-  XCircle, 
-  AlertCircle, 
-  DollarSign, 
-  CreditCard, 
-  Calendar,
+import {
+  Upload,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  DollarSign,
+  CreditCard,
   TrendingUp
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
-interface PagosImportDashboardProps {
-  onBack: () => void;
-}
-
-const PagosImportDashboard = ({ onBack }: PagosImportDashboardProps) => {
+const PagosImportDashboard = () => {
+  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [importProgress, setImportProgress] = useState(0);
@@ -74,10 +70,10 @@ const PagosImportDashboard = ({ onBack }: PagosImportDashboardProps) => {
   };
 
   return (
-    <Layout 
+    <Layout
       title="Dashboard de Importación de Pagos"
       showBackButton
-      onBack={onBack}
+      onBack={() => navigate('/dashboard')}
     >
       <div className="space-y-6">
         {/* Stats Cards */}

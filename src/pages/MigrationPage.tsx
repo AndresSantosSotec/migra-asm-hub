@@ -5,15 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Upload, CheckCircle, XCircle } from 'lucide-react';
+import { Upload, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-interface MigrationPageProps {
-  type: string;
-  onBack: () => void;
-}
-
-const MigrationPage = ({ type, onBack }: MigrationPageProps) => {
+const MigrationPage = () => {
+  const navigate = useNavigate();
+  const { type: routeType } = useParams<{ type: string }>();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [skipErrors, setSkipErrors] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -27,6 +25,12 @@ const MigrationPage = ({ type, onBack }: MigrationPageProps) => {
     'estados-cuenta': 'Estados de Cuenta',
     pagos: 'Pagos',
   };
+
+  const type = routeType && typeLabels[routeType] ? routeType : undefined;
+
+  if (!type) {
+    return <Navigate to="/404" replace />;
+  }
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -70,10 +74,10 @@ const MigrationPage = ({ type, onBack }: MigrationPageProps) => {
   };
 
   return (
-    <Layout 
+    <Layout
       title={`Migrar ${typeLabels[type]}`}
       showBackButton
-      onBack={onBack}
+      onBack={() => navigate('/dashboard')}
     >
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
