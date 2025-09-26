@@ -1,55 +1,53 @@
-import { useState } from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import MigrationPage from "./pages/MigrationPage";
-import PagosImportDashboard from "./pages/PagosImportDashboard";
+import { Toaster } from '@/components/ui/toaster';
+import { Toaster as Sonner } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import MigrationPage from './pages/MigrationPage';
+import PagosImportDashboard from './pages/PagosImportDashboard';
+import NotFound from './pages/NotFound';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentPage, setCurrentPage] = useState<string>('dashboard');
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setCurrentPage('dashboard');
-  };
-
-  const handleNavigate = (path: string) => {
-    setCurrentPage(path);
-  };
-
-  const handleBack = () => {
-    setCurrentPage('dashboard');
-  };
-
-  const renderCurrentPage = () => {
-    if (currentPage === 'dashboard') {
-      return <Dashboard onNavigate={handleNavigate} />;
-    } else if (currentPage.startsWith('/migrate/')) {
-      const type = currentPage.split('/')[2];
-      if (type === 'pagos') {
-        return <PagosImportDashboard onBack={handleBack} />;
-      }
-      return <MigrationPage type={type} onBack={handleBack} />;
-    }
-    return <Dashboard onNavigate={handleNavigate} />;
-  };
-
+const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        {!isLoggedIn ? (
-          <Login onLogin={handleLogin} />
-        ) : (
-          renderCurrentPage()
-        )}
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard onNavigate={() => {}} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/migrate/:type"
+            element={
+              <ProtectedRoute>
+                <MigrationPage type={''} onBack={() => {}} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/migrate/pagos"
+            element={
+              <ProtectedRoute>
+                <PagosImportDashboard onBack={() => {}} />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/404" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/404" replace />} />
+        </Routes>
       </TooltipProvider>
     </QueryClientProvider>
   );

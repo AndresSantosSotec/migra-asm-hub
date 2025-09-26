@@ -3,19 +3,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { useLogin } from '@/hooks/use-auth';
 
-interface LoginProps {
-  onLogin: () => void;
-}
-
-const Login = ({ onLogin }: LoginProps) => {
+const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { handleLogin, error, loading } = useLogin();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement actual authentication with Supabase
-    onLogin();
+    handleLogin(email, password);
   };
 
   return (
@@ -53,9 +50,10 @@ const Login = ({ onLogin }: LoginProps) => {
                 required
               />
             </div>
-            <Button type="submit" className="w-full">
-              Iniciar Sesión
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? 'Validando...' : 'Iniciar Sesión'}
             </Button>
+            {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
           </form>
         </CardContent>
       </Card>
