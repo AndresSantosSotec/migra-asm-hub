@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { getCurrentUser, isAdminOrSpecialUser } from '@/lib/auth';
+import { getCurrentUser, isAdminOrSpecialUser, hasMigrationAccessFromUser } from '@/lib/auth';
 
 interface ProtectedRouteProps {
   children: React.ReactElement;
@@ -9,12 +9,16 @@ interface ProtectedRouteProps {
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const user = getCurrentUser();
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace />; 
   }
 
-  if (!isAdminOrSpecialUser(user)) {
-    return <Navigate to="/404" replace />;
-  }
+  // allow admin or special user quickly
+  if (isAdminOrSpecialUser(user)) return <>{children}</>;
+
+  // otherwise evaluate permissions / allowedViews
+  if (hasMigrationAccessFromUser(user)) return <>{children}</>;
+
+  return <Navigate to="/404" replace />;
 
   return children;
 }

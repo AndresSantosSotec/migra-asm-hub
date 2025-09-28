@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Upload, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { api } from '@/lib/auth';
 
 const MigrationPage = () => {
   const navigate = useNavigate();
@@ -48,24 +49,35 @@ const MigrationPage = () => {
       });
       return;
     }
-
     setIsUploading(true);
-    
-    // Simulate upload process
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      const form = new FormData();
+      form.append('file', selectedFile as File);
+      // include skipErrors as a boolean flag (backend may expect 'skip_errors' or similar)
+      form.append('skip_errors', skipErrors ? '1' : '0');
+
+      const url = `/estudiantes/import`;
+
+      const res = await api.post<any>(url, form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        // Cast the config to any because some axios typings in this project don't include onUploadProgress
+      } as any);
+
+      // Expect backend to return a success envelope or message
       toast({
         title: "¡Importación exitosa!",
-        description: `Se han procesado los ${typeLabels[type].toLowerCase()} correctamente`,
+        description: res?.data?.message || `Se han procesado los ${typeLabels[type].toLowerCase()} correctamente`,
       });
-      
+
       setSelectedFile(null);
       setSkipErrors(false);
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Import failed', error);
+      const msg = error?.response?.data?.message || error?.message || 'Hubo un problema al procesar el archivo';
       toast({
         title: "Error en la importación",
-        description: "Hubo un problema al procesar el archivo",
+        description: msg,
         variant: "destructive",
       });
     } finally {

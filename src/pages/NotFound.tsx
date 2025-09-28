@@ -1,8 +1,11 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { logout, getCurrentUser } from '@/lib/auth';
+import { Button } from '@/components/ui/button';
 
 const NotFound = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);

@@ -9,40 +9,12 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const migrationOptions = [
     {
-      id: 'estudiantes',
-      title: 'Migrar Estudiantes',
-      description: 'Importar datos de estudiantes (StudentsImport.php)',
-      icon: Users,
-      color: 'text-blue-600',
-    },
-    {
-      id: 'usuarios',
-      title: 'Migrar Usuarios',
-      description: 'Importar usuarios del sistema (UserImport.php)',
-      icon: GraduationCap,
-      color: 'text-green-600',
-    },
-    {
       id: 'inscripciones',
       title: 'Migrar Inscripciones',
-      description: 'Procesar inscripciones de estudiantes (InscripcionesImport.php)',
       icon: FileText,
       color: 'text-purple-600',
     },
-    {
-      id: 'prospectos',
-      title: 'Migrar Prospectos',
-      description: 'Importar prospectos y leads (ProspectosImport.php)',
-      icon: Database,
-      color: 'text-orange-600',
-    },
-    {
-      id: 'estados-cuenta',
-      title: 'Estados de Cuenta',
-      description: 'Procesar estados de cuenta bancarios (BankStatementImport.php)',
-      icon: BarChart3,
-      color: 'text-indigo-600',
-    },
+
     {
       id: 'pagos',
       title: 'Migrar Pagos',
@@ -79,20 +51,6 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         ))}
-      </div>
-
-      <div className="mt-12 text-center">
-        <Card className="bg-muted/50">
-          <CardContent className="pt-6">
-            <h3 className="text-lg font-medium mb-2">¿Necesitas ayuda?</h3>
-            <p className="text-muted-foreground mb-4">
-              Consulta nuestra documentación para obtener guías detalladas sobre cada tipo de migración.
-            </p>
-            <Button variant="secondary">
-              Ver Documentación
-            </Button>
-          </CardContent>
-        </Card>
       </div>
     </Layout>
   );
