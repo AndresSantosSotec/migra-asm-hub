@@ -24,13 +24,13 @@ const PagosImportDashboard = () => {
   const [importProgress, setImportProgress] = useState(0);
   const { toast } = useToast();
 
-  // Simulated data for the dashboard
-  const importStats = {
+  // Estado para las estadísticas
+  const [importStats, setImportStats] = useState({
     totalTransactions: 0,
     successfulImports: 0,
     failedImports: 0,
     totalAmount: 0,
-  };
+  });
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,21 +52,61 @@ const PagosImportDashboard = () => {
     setIsProcessing(true);
     setImportProgress(0);
     
-    // Simulate progress
-    const interval = setInterval(() => {
-      setImportProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsProcessing(false);
-          toast({
-            title: "¡Importación exitosa!",
-            description: "Los pagos se han procesado correctamente",
-          });
-          return 100;
-        }
-        return prev + 10;
+    try {
+      // Crear FormData para enviar el archivo
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      // Simular progreso visual
+      const progressInterval = setInterval(() => {
+        setImportProgress((prev) => Math.min(prev + 15, 90));
+      }, 300);
+
+      // Consumir el endpoint
+      const response = await fetch('/api/conciliacion/Import-kardex', {
+        method: 'POST',
+        body: formData,
       });
-    }, 200);
+
+      clearInterval(progressInterval);
+      setImportProgress(100);
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Actualizar estadísticas con los datos del servidor
+        if (data.stats) {
+          setImportStats({
+            totalTransactions: data.stats.totalTransactions || 0,
+            successfulImports: data.stats.successfulImports || 0,
+            failedImports: data.stats.failedImports || 0,
+            totalAmount: data.stats.totalAmount || 0,
+          });
+        }
+
+        toast({
+          title: "¡Importación exitosa!",
+          description: `Se procesaron ${data.stats?.successfulImports || 0} registros correctamente`,
+        });
+
+        // Limpiar el archivo
+        setSelectedFile(null);
+        const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+      } else {
+        throw new Error(data.message || 'Error al procesar el archivo');
+      }
+
+    } catch (error) {
+      toast({
+        title: "Error en la importación",
+        description: error instanceof Error ? error.message : "No se pudo procesar el archivo",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+      setImportProgress(0);
+    }
   };
 
   return (
