@@ -5,20 +5,28 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // 👇 Base pública (ruta donde se servirá en producción)
+  base: "/MigraAPP/",
+
+  // 🔧 Plugins de Vite
+  plugins: [
+    react(),
+    // Solo usar componentTagger en desarrollo
+    mode === "development" && componentTagger(),
+  ].filter(Boolean),
+
+  // ⚙️ Configuración del servidor de desarrollo
   server: {
-    // Listen on all interfaces so the dev server is reachable from localhost and other LAN hosts
-    host: true,
+    host: true, // Escucha todas las interfaces (0.0.0.0)
     port: 8080,
-    // HMR websocket options — ensure the client connects to the right host/protocol/port
     hmr: {
-      // leave host as 'localhost' for browser connections from the same machine;
-      // if you access the app from other devices in the LAN set this to your machine IP (e.g. '192.168.1.100')
-      host: 'localhost',
-      protocol: 'ws',
+      host: "localhost", // Cambiar si accedes desde otra máquina
+      protocol: "ws",
       port: 8080,
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+
+  // 🧭 Alias para imports limpios
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

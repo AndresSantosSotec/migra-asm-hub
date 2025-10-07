@@ -19,7 +19,10 @@ const App: React.FC = () => {
         <Toaster />
         <Sonner />
         <Routes>
+          {/* 🔐 Login */}
           <Route path="/login" element={<Login />} />
+
+          {/* 🔒 Rutas protegidas */}
           <Route
             path="/dashboard"
             element={
@@ -28,6 +31,7 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/migrate/:type"
             element={
@@ -36,6 +40,7 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/migrate/pagos"
             element={
@@ -44,7 +49,11 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+          {/* 🚀 Redirección raíz → login */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
+
+          {/* ❌ Página 404 */}
           <Route path="/404" element={<NotFound />} />
           <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
