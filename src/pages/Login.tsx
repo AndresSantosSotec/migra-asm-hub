@@ -20,10 +20,10 @@ const Login: React.FC = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-semibold text-primary">
-            Migra ASM
+            Mantenimentos ASM
           </CardTitle>
           <p className="text-muted-foreground">
-            Sistema de Gestión de Migraciones
+            Sistema de Mantenimiento de American School of management
           </p>
         </CardHeader>
         <CardContent>

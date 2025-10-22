@@ -32,7 +32,7 @@ const Layout = ({ children, showBackButton, onBack, title }: LayoutProps) => {
             <Button variant="ghost" size="icon" className="text-muted-foreground">
               <Menu className="h-5 w-5" />
             </Button>
-            <h1 className="text-lg font-medium text-foreground">Migra ASM</h1>
+            <h1 className="text-lg font-medium text-foreground">Manteniminetos ASM</h1>
           </div>
           <Button
             variant="ghost"
