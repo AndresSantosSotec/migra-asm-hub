@@ -13,6 +13,7 @@ import {
   CreditCard,
   TrendingUp
 } from 'lucide-react';
+import { getToken } from '@/lib/auth';
 
 const PagosImportDashboard = () => {
   const [selectedFile, setSelectedFile] = useState(null);
