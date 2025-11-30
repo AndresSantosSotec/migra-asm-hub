@@ -61,6 +61,14 @@ const PagosImportDashboard = () => {
 
       // Obtener la URL base de la API desde las variables de entorno
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+      
+      // 🎯 DEBUG: Identificar ambiente
+      if (apiUrl.includes('localhost') || apiUrl.includes('127.0.0.1')) {
+        console.log('🌧️ RICE SHOWER - ', apiUrl);
+      } else {
+        console.log('🎊 TOKAI TEIO - ', apiUrl);
+      }
+      
       const token = getToken();
 
       const response = await fetch(`${apiUrl}/conciliacion/import-kardex`, {
