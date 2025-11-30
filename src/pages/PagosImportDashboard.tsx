@@ -60,11 +60,14 @@ const PagosImportDashboard = () => {
       }, 300);
 
       // Obtener la URL base de la API desde las variables de entorno
-      // En tu proyecto real, esto debería venir de las variables de entorno
-      const apiUrl = 'http://localhost:8000/api';
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+      const token = getToken();
 
       const response = await fetch(`${apiUrl}/conciliacion/import-kardex`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
         body: formData,
       });
 
