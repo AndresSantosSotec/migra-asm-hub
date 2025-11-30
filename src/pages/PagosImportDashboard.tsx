@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,6 +27,16 @@ const PagosImportDashboard = () => {
     failedImports: 0,
     totalAmount: 0,
   });
+
+  // 🎯 DEBUG: Mostrar ambiente al cargar la página
+  useEffect(() => {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+    if (apiUrl.includes('localhost') || apiUrl.includes('127.0.0.1')) {
+      console.log('🌧️ RICE SHOWER - Apuntando a LOCAL:', apiUrl);
+    } else {
+      console.log('🎊 TOKAITEIO - Apuntando a PRODUCCIÓN:', apiUrl);
+    }
+  }, []);
 
   const showToast = (title, description, variant = 'default') => {
     setToastMessage({ title, description, variant });
