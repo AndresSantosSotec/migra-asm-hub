@@ -23,7 +23,6 @@ const Login: React.FC = () => {
             Mantenimentos ASM
           </CardTitle>
           <p className="text-muted-foreground">
-            Sistema de Mantenimiento de American School of management
           </p>
         </CardHeader>
         <CardContent>
